@@ -11,11 +11,22 @@ class AuthController extends Controller
 
     use AuthenticatesUsers;
 
+    
+
     function postlogin(Request $request){
-        if(Auth::attempt($request->only('user_id','password'))){
+
+        $login_type = filter_var($request->input('user_id'), FILTER_VALIDATE_EMAIL)
+            ? 'email'
+            : 'username';
+
+        $request->merge([
+            $login_type => $request->input('user_id')
+        ]);
+
+        if(Auth::attempt($request->only( $login_type,'password'))){
             return redirect('/admin');
         }else {
-            return redirect()->back()->with('gagal','user id/password salah');
+            return redirect()->back()->with('gagal','username / email / password salah');
 
         }
     }
@@ -29,4 +40,6 @@ class AuthController extends Controller
     {
         return view('umum.login');
     }
+
+   
 }

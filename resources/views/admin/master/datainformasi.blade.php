@@ -20,7 +20,6 @@ Data Informasi
         <thead>
             <tr>
                 <th>#</th>
-                <th>ID Informasi</th>
                 <th>Judul</th>
                 <th>Isi</th>
                 <th>Tanggal</th>
@@ -39,13 +38,13 @@ Data Informasi
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
-            <form action="" method="POST" id="formSimpanInformasi" class="form">
+            <form action="#" method="POST" id="formSimpanInformasi" class="form">
                 {{ csrf_field() }}
                 <div class="modal-body">
                     <div class="alert alert-danger" style="display:none"></div>
                     <div class="alert alert-success" style="display:none"></div>
 
-
+                    <input type="hidden" name="txtId" id="txtId">
                     <div class="form-group">
                         <label>Judul Informasi </label>
                         <input type="text" class="form-control" placeholder="Judul Informasi" id="txtJudulInfo" name="txtJudulInfo">
@@ -89,5 +88,5 @@ Data Informasi
         });
     });
 </script>
-
+<script src="{{ asset('/js/Master/informasi.js') }}"></script>
 @endsection

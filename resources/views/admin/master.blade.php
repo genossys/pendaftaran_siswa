@@ -94,9 +94,9 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{route ('siswa')}}" class="nav-link ">
+                                    <a href="{{route ('dataPendaftar')}}" class="nav-link ">
                                         <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Data Siswa</p>
+                                        <p>Data Pendaftar</p>
                                     </a>
                                 </li>
 
@@ -179,6 +179,8 @@
     <script src=" {{asset ('/adminlte/plugins/fastclick/fastclick.js')}}"></script>
     <!-- AdminLTE App -->
     <script src="{{asset ('/adminlte/js/adminlte.js')}}"></script>
+    <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/dataTablesBootstrap4.js') }}"></script>
 
     @yield('script')
 </body>
