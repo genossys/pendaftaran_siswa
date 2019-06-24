@@ -8,9 +8,9 @@ Data Informasi
 
 
 <!-- Button to Open the Modal -->
-<div>
-    <button id="tambahModal" style="margin-bottom: 10px; margin-top: 20px" type="button" class="btn btn-primary box-tools pull-right" data-toggle="modal" data-target="#modaltambahInformasi">
-        Informasi Baru
+<div class="pt-4">
+    <button id="tambahModal" type="button" class="btn btn-primary box-tools pull-left" data-toggle="modal" data-target="#modaltambahInformasi">
+        <span><i class="fa fa-plus-circle" aria-hidden="true"></i></span>
     </button>
 
 </div>
@@ -72,7 +72,7 @@ Data Informasi
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('/css/bootstrap-datepicker.min.css')}}">
-<link rel="stylesheet" href="{{ asset('/css/autotext.css')}}">
+<link rel="stylesheet" href="{{ asset('/css/dataTables.bootstrap4.min.css')}}">
 @endsection
 
 

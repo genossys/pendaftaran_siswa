@@ -283,5 +283,15 @@ ul.navbar-nav {
 }
 
 .sidebar-dark-primary {
-    background-color:   #002f6c
+    background-color: #4e3f33;
+}
+
+.kakicontent {
+    padding: 50px;
+}
+
+.kaki p {
+    color: #aeaeae;
+    font-size: 12px;
+    text-align: center;
 }

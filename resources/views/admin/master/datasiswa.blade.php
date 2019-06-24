@@ -8,15 +8,15 @@ Data Siswa
 
 
 <!-- Button to Open the Modal -->
-<div>
-    
-    <button id="tambahModal" style="margin-bottom: 10px; margin-top: 20px" type="button" class="btn btn-primary box-tools pull-right" data-toggle="modal" data-target="#modaltambahSiswa">
-        Tambah Data Siswa
+<div class="pt-4 ">
+
+    <button id="tambahModal" type="button" class="btn btn-primary pull-left" data-toggle="modal" data-target="#modaltambahSiswa">
+        <span><i class="fa fa-plus-circle" aria-hidden="true"></i></span>
     </button>
 
 </div>
 
-<div class="table-responsive-lg">
+<div class="table-responsive-lg w-100">
     <table id="example2" class="table table-striped  table-bordered table-hover" cellspacing="0" width="100%">
         <thead>
             <tr>
@@ -87,18 +87,18 @@ Data Siswa
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                              <label>Jenis Kelamin</label>
-                              <select class="form-control" name="cmbJenis" id="cmbJenis">
-                                <option value="L">Laki-Laki</option>
-                                <option value="P">Perempuan</option>
-                              </select>
+                                <label>Jenis Kelamin</label>
+                                <select class="form-control" name="cmbJenis" id="cmbJenis">
+                                    <option value="L">Laki-Laki</option>
+                                    <option value="P">Perempuan</option>
+                                </select>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-6">
-                             <div class="form-group">
+                            <div class="form-group">
                                 <label>Nama Ortu </label>
                                 <input type="text" class="form-control" placeholder="Nama Orang Tua" id="txtNamaOrtu" name="txtNamaOrtu">
                             </div>
@@ -111,8 +111,6 @@ Data Siswa
                         </div>
                     </div>
 
-
-
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -120,7 +118,6 @@ Data Siswa
                                 <input type="password" class="form-control" placeholder="Password" id="txtPasswordUser" name="txtPasswordUser">
                             </div>
                         </div>
-
 
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -141,15 +138,15 @@ Data Siswa
                             <label class="custom-file-label" for="customFile">Pilih file</label>
                         </div>
                     </div>
-                </form>
-                    <div class="text-right">
-                        <button id="btnSimpan" class="btn btn-primary"></button>
-                    </div>
-                </div>
-
-            
+            </form>
+            <div class="text-right">
+                <button id="btnSimpan" class="btn btn-primary"></button>
+            </div>
         </div>
+
+
     </div>
+</div>
 </div>
 <!-- EndModal -->
 
@@ -157,21 +154,21 @@ Data Siswa
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                    <h6 class="modal-title">Ganti Status</h6>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
+                <h6 class="modal-title">Ganti Status</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
             <div class="modal-body">
                 <form action="{{ route('gantiStatus') }}" method="POST" id="FormStatus">
                     {{ csrf_field() }}
-                <input type="hidden" name="txtUser" id="txtUser">
-               <div class="form-group">
-                 <label>Status</label>
-                 <select class="form-control" name="cmbStatus" id="cmbStatus">
-                   <option value="menunggu">Menunggu</option>
-                   <option value="terima">Terima</option>
-                   <option value="tolak">Tolak</option>
-                 </select>
-               </div>
+                    <input type="hidden" name="txtUser" id="txtUser">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select class="form-control" name="cmbStatus" id="cmbStatus">
+                            <option value="menunggu">Menunggu</option>
+                            <option value="terima">Terima</option>
+                            <option value="tolak">Tolak</option>
+                        </select>
+                    </div>
             </div>
             <div class="modal-footer">
                 <div class="text-right">
@@ -187,14 +184,15 @@ Data Siswa
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('/css/bootstrap-datepicker.min.css')}}">
+<link rel="stylesheet" href="{{ asset('/css/dataTables.bootstrap4.min.css')}}">
 <link rel="stylesheet" href="{{ asset('/css/autotext.css')}}">
 @endsection
 
 
 @section('script')
 <script src="{{ asset('/js/tampilan/fileinput.js') }}"></script>
-
 <script src="{{ asset('/js/bootstrap-datepicker.min.js') }}"></script>
+
 <script type="text/javascript">
     $(function() {
         $(".datepicker").datepicker({
@@ -205,13 +203,13 @@ Data Siswa
     });
 </script>
 <script src="{{ asset('js/handlebars.js') }}"></script>
-        <script id="details-template" type="text/x-handlebars-templatel">
-           @verbatim
-           
-           
+<script id="details-template" type="text/x-handlebars-templatel">
+    @verbatim
+
+
             <div class="row">
                 <div class="col-sm-2">
-                    <img src="foto/{{ 'urlFoto' }}" height="100" width="100">
+                    <img src="foto/{{ 'urlFoto' }}"  class="w-100 h-100 rounded" style="object-fit: cover">
                 </div>
                 <div class="col-sm-10">
                     <table class="table table-light">
@@ -236,13 +234,13 @@ Data Siswa
                         <tr>
                             <td>Nama Orang Tua</td>
                             <td>:</td>
-                        
+
                             <td>{{ 'namaOrtu' }}</td>
                         </tr>
                         <tr>
                             <td>No. Telp</td>
                             <td>:</td>
-                        
+
                             <td>{{ 'noHp' }}</td>
                         </tr>
                     </tbody>
@@ -254,9 +252,9 @@ Data Siswa
                 </div>
                 </div>
             </div>
-             @endverbatim    
+        @endverbatim
         </script>
-        <script src="{{ asset('/js/tampilan/changemodal.js') }}"></script>
+<script src="{{ asset('/js/tampilan/changemodal.js') }}"></script>
 <script src="{{ asset('/js/Master/pendaftar.js') }}"></script>
 
 @endsection

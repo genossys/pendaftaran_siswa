@@ -8,43 +8,44 @@ use App\Master\pendaftarModel;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-
+use SebastianBergmann\Environment\Console;
 
 class pendaftarControl extends Controller
 {
     //
-    public function index(){
+    public function index()
+    {
         return view('admin/master/datasiswa');
     }
 
-    public function getDataPendaftar(){
+    public function getDataPendaftar()
+    {
         $pendaftar = pendaftarModel::query()
-                    ->select('username','email','nama','alamat','tglLahir','jenisKelamin','namaOrtu','noHp','status','urlFoto')
-                    ->get();
-        
+            ->select('username', 'email', 'nama', 'alamat', 'tglLahir', 'jenisKelamin', 'namaOrtu', 'noHp', 'status', 'urlFoto')
+            ->get();
+
         return DataTables::of($pendaftar)
-                ->addIndexColumn()
-                ->addColumn('action', function($pendaftar){
-                    return '<a class="btn-sm btn-warning" id="btn-edit" href="#" onclick="showStatus(\''.$pendaftar->username.'\', event)" ><i class="fa fa-edit"></i></a>
-                            <a class="btn-sm btn-danger" id="btn-delete" href="#" onclick="hapus(\''.$pendaftar->username.'\',event)" ><i class="fa fa-trash"></i></a>
+            ->addIndexColumn()
+            ->addColumn('action', function ($pendaftar) {
+                return '<a class="btn-sm btn-warning" id="btn-edit" href="#" onclick="showStatus(\'' . $pendaftar->username . '\', event)" ><i class="fa fa-edit"></i></a>
+                            <a class="btn-sm btn-danger" id="btn-delete" href="#" onclick="hapus(\'' . $pendaftar->username . '\',event)" ><i class="fa fa-trash"></i></a>
                             <a class="btn-sm btn-info details-control" id="btn-detail" href="#"><i class="fa fa-folder-open"></i></a>';
-                })
-                ->addColumn('jenisKelamin', function($pendaftar){
-                    if ($pendaftar->jenisKelamin == 'L') {
-                        # code...
-                        return 'Laki-Laki';
-                    } else {
-                        # code...
-                        return 'Perempuan';
-                    }
-                    
-                })
-                ->rawColumns(['action'])
-                ->make(true);
-        
+            })
+            ->addColumn('jenisKelamin', function ($pendaftar) {
+                if ($pendaftar->jenisKelamin == 'L') {
+                    # code...
+                    return 'Laki-Laki';
+                } else {
+                    # code...
+                    return 'Perempuan';
+                }
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
-    private function isValid(Request $r){
+    private function isValid(Request $r)
+    {
         $messages = [
             'required'  => 'Field :attribute Tidak Boleh Kosong',
             'max'       => 'Field :attribute Maksimal :max',
@@ -76,11 +77,10 @@ class pendaftarControl extends Controller
             # code...
             return Validator::make($r->all(), $rulesEdit, $messages);
         }
-        
-        
     }
 
-    public function insert(Request $r){
+    public function insert(Request $r)
+    {
 
         if ($this->isValid($r)->fails()) {
             return response()->json([
@@ -90,12 +90,12 @@ class pendaftarControl extends Controller
         } else {
             if ($r->hasFile('fileFoto')) {
                 $upFoto = $r->file('fileFoto');
-                $namaFoto = $r->txtUsername.'.'.$upFoto->getClientOriginalExtension();
-                $r->fileFoto->move(public_path('foto'),$namaFoto);
+                $namaFoto = $r->txtUsername . '.' . $upFoto->getClientOriginalExtension();
+                $r->fileFoto->move(public_path('foto'), $namaFoto);
             } else {
                 $namaFoto = '';
             }
-            
+
             try {
                 $pendaftar = new pendaftarModel;
                 $pendaftar->email = $r->txtEmail;
@@ -111,24 +111,26 @@ class pendaftarControl extends Controller
                 $pendaftar->urlFoto = $namaFoto;
                 $pendaftar->save();
                 return response()->json([
+                    'value' => 'success',
                     'valid' => true,
                     'sqlResponse' => true,
                     'data' => $pendaftar,
                 ]);
             } catch (\Exception  $e) {
                 //throw $th;
-                $exData = explode('(',$e->getMessage());
+                $exData = explode('(', $e->getMessage());
                 return response()->json([
+                    'value' => 'failed',
                     'valid' => true,
                     'sqlResponse' => false,
                     'data' => $exData[0],
                 ]);
             }
         }
-        
     }
 
-    public function update(Request $r){
+    public function update(Request $r)
+    {
         if ($this->isValid($r)->fails()) {
             return response()->json([
                 'valid' => false,
@@ -149,7 +151,7 @@ class pendaftarControl extends Controller
             ];
 
             if ($r->txtPasswordUser != '') {
-                $data = array_add($data,'password', Hash::make($r->txtPasswordUser));
+                $data = array_add($data, 'password', Hash::make($r->txtPasswordUser));
             }
 
             if ($r->hasFile('fileFoto')) {
@@ -157,12 +159,12 @@ class pendaftarControl extends Controller
                 $namaFoto = $r->txtUsername . '.' . $upFoto->getClientOriginalExtension();
                 $r->fileFoto->move(public_path('foto'), $namaFoto);
                 $data = array_add($data, 'urlFoto', $namaFoto);
-            } 
+            }
 
             try {
                 pendaftarModel::query()
-                ->where('username','=', $oldusername)
-                ->update($data);
+                    ->where('username', '=', $oldusername)
+                    ->update($data);
                 return response()->json([
                     'valid' => true,
                     'sqlResponse' => true,
@@ -176,19 +178,16 @@ class pendaftarControl extends Controller
                 ]);
             }
         }
-
-        
-        
     }
 
     public function updateStatus(Request $r)
-    { 
+    {
         try {
             //code...
             $username = $r->txtUser;
             pendaftarModel::query()
-            ->where('username','=', $username)
-            ->update(['status' => $r->cmbStatus]);
+                ->where('username', '=', $username)
+                ->update(['status' => $r->cmbStatus]);
             return response()->json([
                 'sqlResponse' => true,
             ]);
@@ -201,12 +200,13 @@ class pendaftarControl extends Controller
         }
     }
 
-    public function delete(Request $r){
+    public function delete(Request $r)
+    {
         try {
             $username = $r->input('username');
             pendaftarModel::query()
-            ->where('username','=',$username)
-            ->delete();
+                ->where('username', '=', $username)
+                ->delete();
             return response()->json([
                 'sqlResponse' => true,
             ]);
@@ -218,4 +218,123 @@ class pendaftarControl extends Controller
         }
     }
 
+
+    public  function apiDataPendaftar()
+    {
+        $data = \App\Master\pendaftarModel::all();
+
+        if (count($data) > 0) {
+            $res['message'] = "success";
+            $res['value'] = $data;
+            return response($res);
+        } else {
+            $res['message'] = "empty";
+            return response($res);
+        }
+    }
+
+    public  function apiPencarianPendaftar($id)
+    {
+
+        $data = pendaftarModel::where('id', $id)->first();
+
+        if ($data != null) {
+            $res['value'] = "success";
+            $res['id'] = $data->id;
+            $res['email'] = $data->email;
+            $res['nama'] = $data->nama;
+            $res['alamat'] = $data->alamat;
+            $res['username'] = $data->username;
+            $res['tglLahir'] = $data->tglLahir;
+            $res['jenisKelamin'] = $data->jenisKelamin;
+            $res['namaOrtu'] = $data->namaOrtu;
+            $res['noHp'] = $data->noHp;
+            $res['urlFoto'] = $data->urlFoto;
+            return response($res);
+        } else {
+            $res['value'] = "empty";
+            return response($res);
+        }
+    }
+
+    public function apiSimpanPendaftaran(Request $request)
+    {
+
+        $data = pendaftarModel::where('username', $request->txtUsername)->first();
+        $data2 = pendaftarModel::where('email', $request->txtEmail)->first();
+
+        if ($data != null) {
+            return response()->json(['value' => "username sudah di pakai"]);
+         } else if($data2 != null) {
+            return response()->json(['value' => "email sudah di pakai"]);
+         }else{
+            try {
+                $pendaftar = new pendaftarModel;
+                $pendaftar->email = $request->txtEmail;
+                $pendaftar->username = $request->txtUsername;
+                $pendaftar->password = Hash::make($request->txtPasswordUser);
+                $pendaftar->nama = $request->txtNama;
+                $pendaftar->alamat = $request->txtAlamat;
+                $pendaftar->tglLahir = $request->dateTanggalLahir;
+                $pendaftar->jenisKelamin = $request->cmbJenis;
+                $pendaftar->namaOrtu = $request->txtNamaOrtu;
+                $pendaftar->urlFoto = $request->urlFoto;
+                $pendaftar->noHp = $request->txtNoTelp;
+                $pendaftar->status = "menunggu";
+                $pendaftar->save();
+
+
+                return response()->json(['value' => "success"]);
+            } catch (\Exception $th) {
+                return response()->json([
+                    'value' => 'ada kesalahan input data, coba cek kembali data anda'
+
+                ]);
+            }
+        }
+    }
+
+    public function apiUploadFoto()
+    {
+        $target_dir = "foto/";
+        $target_file_name = $target_dir . basename($_FILES["file"]["name"]);
+        $response = array();
+
+        // Check if image file is an actual image or fake image
+        if (isset($_FILES["file"])) {
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file_name)) {
+                $value = "success";
+                $message = "Successfully Uploaded";
+            } else {
+                $value = "failed";
+                $message = "Error while uploading";
+            }
+        } else {
+            $value = "failed";
+            $message = "Required Field Missing";
+        }
+        $response["value"] = $value;
+        $response["message"] = $message;
+        echo json_encode($response);
+    }
+
+    public function apiLogin(Request $request)
+    {
+        $email = $request->email;
+        $password = $request->password;
+        $getPendaftar = pendaftarModel::where('email', $email)->first();
+        if ($getPendaftar != null) {
+            $getPassword = $getPendaftar->password;
+            $getNama = $getPendaftar->username;
+            $getemail = $getPendaftar->email;
+            $getId = $getPendaftar->id;
+            if (Hash::check($password, $getPassword)) {
+                return response()->json(['password' => $getPassword, 'value' => 'sukses', 'id' => $getId, 'nama' => $getNama, 'email' => $getemail]);
+            } else {
+                return response()->json(['password' => $getPassword, 'value' => 'gagal']);
+            }
+        } else {
+            return response()->json(['value' => "user tidak terdaftar"]);
+        }
+    }
 }

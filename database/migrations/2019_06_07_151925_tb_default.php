@@ -48,6 +48,6 @@ class TbDefault extends Migration
     {
         //
         Schema::dropIfExists('tb_pendaftar');
-        Schema::dropIfExists( 'tb_informasi');
+        Schema::dropIfExists('tb_informasi');
     }
 }

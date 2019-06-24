@@ -43,7 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/editDataInformasi','Master\infromasiControl@update');
         Route::delete('/hapusDataInformasi','Master\informasiControl@delete');
     });
-    
+
     Route::get('/admin', function () {
         return view('/admin/menuawal');
     })->name('admin');
@@ -51,3 +51,11 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/apiPencarianPendaftar/{id}','Master\pendaftarControl@apiPencarianPendaftar');
+Route::get('/apiDataPendaftar','Master\pendaftarControl@apiDataPendaftar');
+Route::post('/apiSimpanPendaftaran','Master\pendaftarControl@apiSimpanPendaftaran');
+Route::post('/apiUploadFoto','Master\pendaftarControl@apiUploadFoto');
+Route::post('/apiLogin','Master\pendaftarControl@apiLogin');
+Route::get('/profilsekolah', function () {
+    return view('/umum/profilsekolah');
+})->name('profilsekolah');
