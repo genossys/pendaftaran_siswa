@@ -246,7 +246,7 @@ Data Siswa
                     </tbody>
                 </table>
                 <div class="text-right">
-                    <button id="btnCetak" class="btn btn-primary">Cetak</button>
+                    <a id="btnCetak" class="btn btn-primary" href="/cetakDataSiswa/{{ id }}">Cetak</a>
                     <button id="btnEdit" class="btn btn-primary" onclick="showEditModal('{{'username'}}', '{{'email'}}',
                     '{{'nama'}}', '{{'alamat'}}','{{'tglLahir'}}', '{{'jenisKelamin'}}', '{{'namaOrtu'}}', '{{ 'noHp' }}', event)">Edit</button>
                 </div>

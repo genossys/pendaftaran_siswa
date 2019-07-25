@@ -16,14 +16,14 @@ Data Informasi
 </div>
 
 <div class="table-responsive-lg">
-    <table id="example2" class="table table-striped  table-bordered table-hover" cellspacing="0" width="100%">
+    <table id="example2" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>#</th>
                 <th>Judul</th>
                 <th>Isi</th>
-                <th>Tanggal</th>
-                <th>Action</th>
+                <th style="min-width: 100px">Tanggal</th>
+                <th style="min-width: 100px">Action</th>
             </tr>
         </thead>
     </table>

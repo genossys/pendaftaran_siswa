@@ -22,8 +22,9 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         //
         '/apiSimpanPendaftaran',
+        '/apiSimpanPendaftaranAkun',
         '/apiUploadFoto',
-        "apiLogin",
+        "/apiLogin",
 
     ];
 

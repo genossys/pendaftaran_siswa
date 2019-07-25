@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Master;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Master\pendaftarModel;
+use App\Master\userModel;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use SebastianBergmann\Environment\Console;
+use Dompdf\Dompdf;
 
 class pendaftarControl extends Controller
 {
@@ -18,10 +20,37 @@ class pendaftarControl extends Controller
         return view('admin/master/datasiswa');
     }
 
+    public function laporan()
+    {
+        return view('admin/laporan/datasiswa');
+    }
+
+    public function getDataLaporanPendaftar(Request $req)
+    {
+        $pendaftar = pendaftarModel::all();
+
+        return DataTables::of($pendaftar)
+            ->addIndexColumn()
+            ->addColumn('action', function ($pendaftar) {
+                return '<a class="btn-sm btn-info details-control" id="btn-detail" href="#"><i class="fa fa-folder-open"></i></a>';
+            })
+            ->addColumn('jenisKelamin', function ($pendaftar) {
+                if ($pendaftar->jenisKelamin == 'L') {
+                    # code...
+                    return 'Laki-Laki';
+                } else {
+                    # code...
+                    return 'Perempuan';
+                }
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
     public function getDataPendaftar()
     {
         $pendaftar = pendaftarModel::query()
-            ->select('username', 'email', 'nama', 'alamat', 'tglLahir', 'jenisKelamin', 'namaOrtu', 'noHp', 'status', 'urlFoto')
+            ->select('id', 'username', 'email', 'nama', 'alamat', 'tglLahir', 'jenisKelamin', 'namaOrtu', 'noHp', 'status', 'urlFoto')
             ->get();
 
         return DataTables::of($pendaftar)
@@ -233,10 +262,10 @@ class pendaftarControl extends Controller
         }
     }
 
-    public  function apiPencarianPendaftar($id)
+    public  function apiPencarianPendaftar($email)
     {
 
-        $data = pendaftarModel::where('id', $id)->first();
+        $data = pendaftarModel::where('email', $email)->first();
 
         if ($data != null) {
             $res['value'] = "success";
@@ -265,14 +294,13 @@ class pendaftarControl extends Controller
 
         if ($data != null) {
             return response()->json(['value' => "username sudah di pakai"]);
-         } else if($data2 != null) {
+        } else if ($data2 != null) {
             return response()->json(['value' => "email sudah di pakai"]);
-         }else{
+        } else {
             try {
                 $pendaftar = new pendaftarModel;
                 $pendaftar->email = $request->txtEmail;
                 $pendaftar->username = $request->txtUsername;
-                $pendaftar->password = Hash::make($request->txtPasswordUser);
                 $pendaftar->nama = $request->txtNama;
                 $pendaftar->alamat = $request->txtAlamat;
                 $pendaftar->tglLahir = $request->dateTanggalLahir;
@@ -283,11 +311,43 @@ class pendaftarControl extends Controller
                 $pendaftar->status = "menunggu";
                 $pendaftar->save();
 
+                $user = userModel::find($request->id);
+                $user->isiFormulir = "sudah";
+                $user->save();
 
                 return response()->json(['value' => "success"]);
             } catch (\Exception $th) {
                 return response()->json([
                     'value' => 'ada kesalahan input data, coba cek kembali data anda'
+
+                ]);
+            }
+        }
+    }
+
+    public function apiSimpanPendaftaranAkun(Request $request)
+    {
+
+        $data = userModel::where('username', $request->txtUsername)->first();
+        $data2 = userModel::where('email', $request->txtEmail)->first();
+
+        if ($data != null) {
+            return response()->json(['value' => "username sudah di pakai"]);
+        } else if ($data2 != null) {
+            return response()->json(['value' => "email sudah di pakai"]);
+        } else {
+            try {
+                $pendaftar = new userModel;
+                $pendaftar->email = $request->txtEmail;
+                $pendaftar->username = $request->txtUsername;
+                $pendaftar->password = Hash::make($request->txtPasswordUser);
+                $pendaftar->save();
+
+
+                return response()->json(['value' => "success"]);
+            } catch (\Exception $th) {
+                return response()->json([
+                    'value' => $th
 
                 ]);
             }
@@ -322,19 +382,29 @@ class pendaftarControl extends Controller
     {
         $email = $request->email;
         $password = $request->password;
-        $getPendaftar = pendaftarModel::where('email', $email)->first();
+        $getPendaftar = userModel::where('email', $email)->first();
         if ($getPendaftar != null) {
             $getPassword = $getPendaftar->password;
             $getNama = $getPendaftar->username;
             $getemail = $getPendaftar->email;
             $getId = $getPendaftar->id;
+            $getIsiFormulir = $getPendaftar->isiFormulir;
             if (Hash::check($password, $getPassword)) {
-                return response()->json(['password' => $getPassword, 'value' => 'sukses', 'id' => $getId, 'nama' => $getNama, 'email' => $getemail]);
+                return response()->json(['password' => $getPassword, 'value' => 'sukses', 'id' => $getId, 'username' => $getNama, 'email' => $getemail, 'isiFormulir' => $getIsiFormulir]);
             } else {
                 return response()->json(['password' => $getPassword, 'value' => 'gagal']);
             }
         } else {
             return response()->json(['value' => "user tidak terdaftar"]);
         }
+    }
+
+    public function cetakDataSiswa()
+    {
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml('');
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+        $dompdf->stream();
     }
 }

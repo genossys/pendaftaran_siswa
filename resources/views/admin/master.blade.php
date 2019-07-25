@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{asset ('adminlte/plugins/font-awesome/css/font-awesome.min.css')}}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="{{ asset('/adminlte/css/adminlte.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css')}}">
     <!-- Genosstyle -->
     <link rel="stylesheet" href="{{ asset('/css/genosstyle.css')}}">
     <!-- bootstrap wysihtml5 - text editor -->
@@ -117,7 +118,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="" class="nav-link ">
+                                    <a href="{{route ('dataLaporanSiswa')}}" class="nav-link ">
                                         <i class="fa fa-circle-o nav-icon"></i>
                                         <p>Laporan Data Siswa</p>
                                     </a>

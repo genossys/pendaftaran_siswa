@@ -11,24 +11,26 @@ use Illuminate\Support\Facades\Validator;
 class informasiControl extends Controller
 {
     //
-    public function index(){
+    public function index()
+    {
         return view('admin/master/datainformasi');
     }
 
-    public function getDataInformasi(){
+    public function getDataInformasi()
+    {
         $informasi = informasiModel::query()
-                    ->select('judul', 'isi', 'tanggal')
-                    ->get();
-        
+            ->select('judul', 'isi', 'tanggal')
+            ->get();
+
         return DataTables::of($informasi)
-                    ->addIndexColumn()
-                    ->addColumn('action', function ($informasi) {
-                        return '<a class="btn-sm btn-warning" id="btn-edit" href="#" onclick="showEditModal(\''.$informasi->id.'\', event)" ><i class="fa fa-edit"></i></a>
+            ->addIndexColumn()
+            ->addColumn('action', function ($informasi) {
+                return '<a class="btn-sm btn-warning" id="btn-edit" href="#" onclick="showEditModal(\'' . $informasi->id . '\', event)" ><i class="fa fa-edit"></i></a>
                                     <a class="btn-sm btn-danger" id="btn-delete" href="#" onclick="" ><i class="fa fa-trash"></i></a>
                                     <a class="btn-sm btn-info details-control" id="btn-detail" href="#"><i class="fa fa-folder-open"></i></a>';
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     private function isValid(Request $r)
@@ -41,14 +43,14 @@ class informasiControl extends Controller
         $rules = [
             'txtJudulInfo' => 'required|max:25',
             'txtIsiInfo' => 'required|max:191',
-            
+
         ];
-        
-            return Validator::make($r->all(), $rules, $messages);
-        
+
+        return Validator::make($r->all(), $rules, $messages);
     }
 
-    public function insert(Request $r){
+    public function insert(Request $r)
+    {
 
         if ($this->isValid($r)->fails()) {
             return response()->json([
@@ -67,7 +69,6 @@ class informasiControl extends Controller
                     'sqlResponse' => true,
                     'data' => $informasi,
                 ]);
-
             } catch (\Exception $th) {
                 //throw $th;
                 $exData = explode('(', $th->getMessage());
@@ -80,13 +81,14 @@ class informasiControl extends Controller
         }
     }
 
-    public function update(Request $r){
+    public function update(Request $r)
+    {
         if ($this->isValid($r)->fails()) {
             return response()->json([
                 'valid' => false,
                 'errors' => $this->isValid($r)->errors()->all(),
             ]);
-        }else {
+        } else {
             $id = $r->txtId;
             $data = [
                 'judul' => $r->txtJudul,
@@ -111,7 +113,8 @@ class informasiControl extends Controller
         }
     }
 
-    public function delete(Request $r){
+    public function delete(Request $r)
+    {
         try {
             $id = $r->input('id');
             pendaftarModel::query()
@@ -126,5 +129,13 @@ class informasiControl extends Controller
                 'data' => $th
             ]);
         }
+    }
+
+    public function showInformasi()
+    {
+        $info = informasiModel::orderby('created_at', 'desc')
+            ->get();
+
+        return view('umum.informasi')->with('info', $info);
     }
 }
