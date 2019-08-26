@@ -27,6 +27,16 @@ Route::group(['middleware' => 'auth'], function () {
         return view('/admin/menuawal');
     });
 
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/', 'Master\userController@index')->name('pageuser');
+        Route::get('/showUser', 'Master\userController@showUser');
+        Route::get('/showDataEdit', 'Master\userController@showDataEdit');
+        Route::post('/insertUser', 'Master\userController@insertUser');
+        Route::post('/editUser', 'Master\userController@editUser');
+        Route::post('/editPassword', 'Master\userController@editPassword');
+        Route::delete('/deleteData', 'Master\userController@deleteData');
+    });
+
     Route::prefix('pendaftaran')->group(function () {
         Route::get('/', 'Master\pendaftarControl@index')->name('dataPendaftar');
         Route::post('/simpanDataPendaftar', 'Master\pendaftarControl@insert')->name('simpanPendaftar');
@@ -46,7 +56,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/getDataInformasi', 'Master\informasiControl@getDataInformasi');
         Route::post('/simpanDataInformasi', 'Master\informasiControl@insert')->name('simpanInformasi');
         Route::post('/editDataInformasi', 'Master\infromasiControl@update');
-        Route::delete('/hapusDataInformasi', 'Master\informasiControl@delete');
+        Route::delete('/deleteData', 'Master\informasiControl@deleteData');
     });
 
     Route::get('/admin', function () {

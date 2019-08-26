@@ -89,4 +89,40 @@ Data Informasi
     });
 </script>
 <script src="{{ asset('/js/Master/informasi.js') }}"></script>
+
+<script>
+    function deleteData(id) {
+        Swal.fire({
+            title: 'Anda yakin?',
+            text: "data ini akan di hapus! "+ id,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus saja!'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/informasi/deleteData',
+                    data: {
+                        id: id,
+                    },
+                    success: function(response) {
+
+                        Swal.fire(
+                            'Deleted!',
+                            'Data berhasil di hapus',
+                            'success'
+                        )
+                        location.reload();
+                    },
+                    error: function(response) {
+                        alert('gagal \n' + response.responseText);
+                    }
+                });
+            }
+        })
+    }
+</script>
 @endsection

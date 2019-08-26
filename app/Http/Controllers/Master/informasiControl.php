@@ -19,14 +19,14 @@ class informasiControl extends Controller
     public function getDataInformasi()
     {
         $informasi = informasiModel::query()
-            ->select('judul', 'isi', 'tanggal')
+            ->select('id','judul', 'isi', 'tanggal')
             ->get();
 
         return DataTables::of($informasi)
             ->addIndexColumn()
             ->addColumn('action', function ($informasi) {
                 return '<a class="btn-sm btn-warning" id="btn-edit" href="#" onclick="showEditModal(\'' . $informasi->id . '\', event)" ><i class="fa fa-edit"></i></a>
-                                    <a class="btn-sm btn-danger" id="btn-delete" href="#" onclick="" ><i class="fa fa-trash"></i></a>
+                                    <a class="btn-sm btn-danger" id="btn-delete" href="#" onclick="deleteData(\'' . $informasi->id . '\')" ><i class="fa fa-trash"></i></a>
                                     <a class="btn-sm btn-info details-control" id="btn-detail" href="#"><i class="fa fa-folder-open"></i></a>';
             })
             ->rawColumns(['action'])
@@ -113,22 +113,11 @@ class informasiControl extends Controller
         }
     }
 
-    public function delete(Request $r)
+    public function deleteData(Request $r)
     {
-        try {
-            $id = $r->input('id');
-            pendaftarModel::query()
-                ->where('id', '=', $id)
-                ->delete();
-            return response()->json([
-                'sqlResponse' => true,
-            ]);
-        } catch (\Exception $th) {
-            return response()->json([
-                'sqlResponse' => false,
-                'data' => $th
-            ]);
-        }
+        $id = $r->id;
+        $hapusInfo = informasiModel::find($id);
+        $hapusInfo->delete();
     }
 
     public function showInformasi()

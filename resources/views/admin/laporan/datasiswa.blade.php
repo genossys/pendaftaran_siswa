@@ -8,12 +8,20 @@ Data Siswa
 
 
 <!-- Button to Open the Modal -->
+<div class="form-group pt-3 w-25">
+    <label>Status</label>
+    <select class="form-control" id="status" name="status">
+        <option value="">semua</option>
+        <option value="menunggu">menunggu</option>
+        <option value="terima">terima</option>
+        <option value="tolak">tolak</option>
+    </select>
+</div>
+
 <div class="pt-4 ">
     <a type="button" class="btn btn-primary pull-left" href="/cetakLapSiswa">
         <span><i class="fa fa-print" aria-hidden="true"></i></span>
     </a>
-
-
 </div>
 
 <div class="table-responsive-lg w-100">
@@ -53,11 +61,12 @@ Data Siswa
             todayHighlight: true,
         });
     });
+
+
 </script>
 <script src="{{ asset('js/handlebars.js') }}"></script>
 <script id="details-template" type="text/x-handlebars-templatel">
     @verbatim
-
 
             <div class="row">
                 <div class="col-sm-2">

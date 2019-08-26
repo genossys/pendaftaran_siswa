@@ -27,7 +27,7 @@ class pendaftarControl extends Controller
 
     public function getDataLaporanPendaftar(Request $req)
     {
-        $pendaftar = pendaftarModel::all();
+        $pendaftar = pendaftarModel::where('status', 'LIKE', $req->status);
 
         return DataTables::of($pendaftar)
             ->addIndexColumn()
@@ -279,6 +279,7 @@ class pendaftarControl extends Controller
             $res['namaOrtu'] = $data->namaOrtu;
             $res['noHp'] = $data->noHp;
             $res['urlFoto'] = $data->urlFoto;
+            $res['status'] = $data->status;
             return response($res);
         } else {
             $res['value'] = "empty";

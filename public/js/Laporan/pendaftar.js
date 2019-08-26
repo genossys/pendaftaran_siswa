@@ -1,13 +1,23 @@
 var alertSukses = $(".alert-success");
 var alertDanger = $(".alert-danger");
-
+var status = $("#status").val();
 var template = Handlebars.compile($("#details-template").html());
+
 var table = $("#example2").DataTable({
     lengthMenu: [[5, 10, 15, -1], [5, 10, 15, "All"]],
     autowidth: true,
     serverSide: true,
     processing: false,
-    ajax: "/laporan/getDataLaporanPendaftar",
+    ajax: {
+        type: "GET",
+        url: "/laporan/getDataLaporanPendaftar",
+       "data": function ( d ) {
+            return $.extend( {}, d, {
+        "status": $('#status').val()
+      });
+        }
+    },
+
     columns: [
         {
             data: "DT_RowIndex",
@@ -257,3 +267,10 @@ $("#tambahModal").on("click", function() {
     alertDanger.hide();
     alertSukses.hide();
 });
+
+$("#status").change(function() {
+    status = $("#status").val();
+    table.draw();
+    alert(status);
+});
+

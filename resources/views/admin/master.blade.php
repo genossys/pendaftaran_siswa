@@ -18,10 +18,11 @@
     <!-- Genosstyle -->
     <link rel="stylesheet" href="{{ asset('/css/genosstyle.css')}}">
     <!-- bootstrap wysihtml5 - text editor -->
-    <link rel="stylesheet" href=" {{ asset('/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}}">
+    <!-- <link rel="stylesheet" href=" {{ asset('/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}}"> -->
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-
+    <link href="{{ asset('/css/sweetalert2.min.css') }}" rel="stylesheet">
+    <script src="{{ asset('/js/sweetalert2.min.js') }}"></script>
     @yield('css')
 </head>
 
@@ -92,6 +93,14 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
+
+                                <li class="nav-item ">
+                                    <a href="{{route ('pageuser')}}" class="nav-link">
+                                        <i class="fa fa-circle-o nav-icon"></i>
+                                        <p>Data User</p>
+                                    </a>
+                                </li>
+
                                 <li class="nav-item">
                                     <a href="{{route ('dataPendaftar')}}" class="nav-link ">
                                         <i class="fa fa-circle-o nav-icon"></i>
@@ -164,22 +173,26 @@
     <script src="{{ asset ('/adminlte/plugins/jquery/jquery.min.js')}}"></script>
 
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
-        $.widget.bridge('uibutton', $.ui.button)
-    </script>
+
     <!-- Bootstrap 4 -->
     <script src=" {{asset ('/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <!-- Bootstrap WYSIHTML5 -->
-    <script src=" {{ asset ('/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
+    <!-- <script src=" {{ asset ('/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script> -->
     <!-- Slimscroll -->
-    <script src="{{asset ('/adminlte/plugins/slimScroll/jquery.slimscroll.min.js')}}"></script>
+    <!-- <script src="{{asset ('/adminlte/plugins/slimScroll/jquery.slimscroll.min.js')}}"></script> -->
     <!-- FastClick -->
-    <script src=" {{asset ('/adminlte/plugins/fastclick/fastclick.js')}}"></script>
+    <!-- <script src=" {{asset ('/adminlte/plugins/fastclick/fastclick.js')}}"></script> -->
     <!-- AdminLTE App -->
-    <script src="{{asset ('/adminlte/js/adminlte.js')}}"></script>
+    <script src="{{asset ('adminlte/js/adminlte.js')}}"></script>
     <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/dataTablesBootstrap4.js') }}"></script>
-
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
     @yield('script')
 </body>
 
